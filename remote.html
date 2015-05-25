@@ -1,0 +1,50 @@
+<html>
+	<head>
+		 <meta name="viewport" content="width=device-width">
+		<style>
+		div {
+			width: 100%;
+			height: 70%;
+			display: block;
+			background-color: rgb(203, 93, 76);
+		}
+		.back {
+			height: 30%;
+			background-color: rgb(130, 95, 76);
+		}
+		body {margin: 0;}
+		</style>
+	</head>
+	<body>
+		<div class="forward">...</div>
+		<div class="back">...</div>
+		<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+		<script>
+			//host
+			var fwd = document.querySelector(".forward");
+			var back = document.querySelector(".back");
+			var id = "s" + Math.floor(Math.random()*1000);
+			var targetId = "talk" + window.prompt("enter presentation number","");
+
+			fwd.addEventListener('click', function() {
+				//this line clears error messages
+				fwd.innerHTML = "FORWARD";
+				conn.send("fwd");
+			});
+			back.addEventListener('click', function() {
+				conn.send("back");
+			});
+
+			var peer = new Peer(id, {key: 'g9eb986tyyqr529'});
+			var conn = peer.connect(targetId);
+			conn.on('open', function() {
+				fwd.innerHTML = "Forward";
+				back.innerHTML = "Back";
+			});
+			peer.on('error', function (er) {
+				fwd.innerHTML += "<br>" + er + ", try reconnect...";
+				peer.connect(targetId);
+			});
+		</script>
+	</body>
+</html>
